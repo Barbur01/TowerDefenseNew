@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 33650586189209514}
   - component: {fileID: 135840282169114708}
   - component: {fileID: 23599409380292566}
-  - component: {fileID: 114963098210190984}
   - component: {fileID: 114210029020670486}
   m_Layer: 11
   m_Name: Projectile
@@ -96,20 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1900d917116c47d43b8e3179275072fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Speed: 1
---- !u!114 &114963098210190984
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1448341007224154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96152c69f55a5104f89e24dd56024134, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   m_Speed: 10
-  m_Damage: 1
 --- !u!135 &135840282169114708
 SphereCollider:
   m_ObjectHideFlags: 1

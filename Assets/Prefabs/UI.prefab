@@ -62,7 +62,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1320805039642238
 GameObject:
   m_ObjectHideFlags: 1
@@ -218,7 +218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1869467418439600
 GameObject:
   m_ObjectHideFlags: 1
@@ -402,6 +402,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792916352aa628e47bbc2fa1b49c1343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_CoinsText: {fileID: 114387796837390470}
+  m_CancelButton: {fileID: 114522877964555560}
+  m_CreateButton: {fileID: 114344923952418768}
+  m_UpgradeButton: {fileID: 114703846248194998}
 --- !u!114 &114344923952418768
 MonoBehaviour:
   m_ObjectHideFlags: 1

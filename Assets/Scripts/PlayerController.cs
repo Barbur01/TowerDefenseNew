@@ -12,6 +12,12 @@ public class PlayerController
         INVALID
     };
 
+    public delegate void PlacingTower();
+    public static event PlacingTower OnPlacingTower;
+
+    public delegate void TowerConstructed();
+    public static event TowerConstructed OnTowerConstructed;
+
     State m_State = State.INVALID;
     TowerManager m_TowerManager = null;
     Player m_Player = null;
@@ -45,12 +51,22 @@ public class PlayerController
     {
         if (m_State == State.IDLE)
         {
-            Debug.Log("OnCreateTowerButtonPressed");
-            m_TowerToManipulate = m_TowerManager.PrepareNewTower(Tower.Type.BASIC);
+            int cost = m_TowerManager.GetCost(Tower.Type.BASIC);
 
-            if (m_TowerToManipulate != null)
+            if (m_Player.CanAfford(cost))
             {
-                m_State = State.PLACING_TOWER;
+                Debug.Log("OnCreateTowerButtonPressed");
+                m_TowerToManipulate = m_TowerManager.PrepareNewTower(Tower.Type.BASIC);
+
+                if (m_TowerToManipulate != null)
+                {
+                    m_State = State.PLACING_TOWER;
+
+                    if (OnPlacingTower != null)
+                    {
+                        OnPlacingTower();
+                    }
+                }
             }
         }
     }
@@ -145,9 +161,17 @@ public class PlayerController
             {
                 if (!EventSystem.current.IsPointerOverGameObject() && canBuild)
                 {
+                    m_TowerManager.AddTower(m_TowerToManipulate);
+                    m_TowerToManipulate.Construct();
+
                     m_Player.AddCoins(-m_TowerToManipulate.GetCost());
-                    m_TowerToManipulate.Build();
+
                     m_TowerToManipulate = null;
+
+                    if (OnTowerConstructed != null)
+                    {
+                        OnTowerConstructed();
+                    }
 
                     m_State = State.IDLE;
                 }

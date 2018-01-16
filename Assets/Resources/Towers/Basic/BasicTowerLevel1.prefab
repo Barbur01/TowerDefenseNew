@@ -48,7 +48,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1330760807987484
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -87,11 +87,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1330760807987484}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3679999, z: 0.527}
-  m_LocalScale: {x: 0.18460695, y: 0.18460716, z: 0.18460716}
+  m_LocalPosition: {x: 0, y: 0.17593688, z: 0.52699995}
+  m_LocalScale: {x: 0.18460695, y: 0.55998665, z: 0.18460716}
   m_Children: []
-  m_Father: {fileID: 4740822346509368}
-  m_RootOrder: 2
+  m_Father: {fileID: 4340033264305052}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4340033264305052
 Transform:
@@ -102,7 +102,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.31, z: 0}
   m_LocalScale: {x: 1, y: 0.32966352, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4099588211360384}
   m_Father: {fileID: 4740822346509368}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -131,7 +132,6 @@ Transform:
   m_Children:
   - {fileID: 4673842468199930}
   - {fileID: 4340033264305052}
-  - {fileID: 4099588211360384}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -279,6 +279,7 @@ MonoBehaviour:
   m_Data:
     m_ShootSpeed: 0.8
     m_RotationSpeed: 60
+    m_ShootingRadius: 7
     m_Cost: 8
     m_Damage: 1
     m_Projectile: {fileID: 1448341007224154, guid: 7bfa1ba594558a44b8c7d1c684b5d96a,
@@ -291,7 +292,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1017078212514646}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.54
   m_Height: 2.28
   m_Direction: 1

@@ -7,12 +7,16 @@ public class Tower
     List<TowerLevel> m_TowerLevels = new List<TowerLevel>();
     int m_CurrentLevelIndex = 0;
     TowerLevel m_CurrentLevel = null;
+    TowerController m_Controller = null;
+
+    Transform m_EnemyTarget = null;
 
     Vector3 m_Position;
 
     public enum Type
     {
         BASIC = 0,
+        COUNT,
         INVALID
     };
 
@@ -21,14 +25,26 @@ public class Tower
     public Tower(Type type)
     {
         m_Type = type;
+        m_Controller = new TowerController(this);
     }
 
     public void Destroy()
     {
         if (m_CurrentLevel)
         {
-            GameObject.Destroy(m_CurrentLevel);
+            GameObject.Destroy(m_CurrentLevel.gameObject);
+            m_CurrentLevel = null;
         }
+    }
+
+    public TowerData GetCurrentLevelData()
+    {
+        if (m_CurrentLevel)
+        {
+            return m_CurrentLevel.m_Data;
+        }
+
+        return new TowerData();
     }
 
     public int GetCost()
@@ -37,8 +53,50 @@ public class Tower
         {
             return m_CurrentLevel.GetCost();
         }
+        else
+        {
+            if (m_TowerLevels.Count > 0)
+            {
+                return m_TowerLevels[0].m_Data.m_Cost;
+            }
+        }
 
         return 0;
+    }
+
+    public void SetEnemyTarget(Transform target)
+    {
+        m_EnemyTarget = target;
+    }
+
+    public Transform GetEnemyTarget()
+    {
+        return m_EnemyTarget;
+    }
+
+    public bool HasEnemyTarget()
+    {
+        return m_EnemyTarget != null;
+    }
+
+    public Vector3 GetCannonForward()
+    {
+        if (m_CurrentLevel)
+        {
+            return m_CurrentLevel.GetCannonTopForward();
+        }
+
+        return Vector3.forward;
+    }
+
+    public Vector3 GetCannonPosition()
+    {
+        return m_CurrentLevel.GetCannonPosition();
+    }
+
+    public void RotateCannon(float angle)
+    {
+        m_CurrentLevel.RotateCannon(angle);
     }
 
     public bool IsOwnCollider(Collider col)
@@ -71,6 +129,11 @@ public class Tower
         }
     }
 
+    public Vector3 GetPosition()
+    {
+        return m_Position;
+    }
+
     public void SetBuildColor(bool canBuild)
     {
         if (m_CurrentLevel)
@@ -79,9 +142,12 @@ public class Tower
         }
     }
 
-    public void Build()
+    public void Construct()
     {
-
+        if (m_CurrentLevel)
+        {
+            m_CurrentLevel.GetComponent<CapsuleCollider>().enabled = true;
+        }
     }
 
     public void AddLevel(TowerLevel level)
@@ -98,6 +164,10 @@ public class Tower
     public void PrepareToPlace()
     {
         m_CurrentLevel = CreateTowerLevel();
+        if (m_CurrentLevel)
+        {
+            m_CurrentLevel.GetComponent<CapsuleCollider>().enabled = false;
+        }
     }
 
     public void Upgrade()
@@ -118,6 +188,6 @@ public class Tower
 
     public void Update()
     {
-
+        m_Controller.Update();
     }
 }

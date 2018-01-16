@@ -7,11 +7,17 @@ using UnityEngine.AI;
 public class TowerLevel : MonoBehaviour
 {
     public TowerData m_Data;
-    Transform m_Transform;
+    Transform m_Transform = null;
+    Transform m_CannonTop = null;
 
     void Awake()
     {
         m_Transform = transform;
+    }
+
+    private void Start()
+    {
+        m_CannonTop = m_Transform.Find("Top");
     }
 
     public void SetPosition(Vector3 pos)
@@ -32,6 +38,21 @@ public class TowerLevel : MonoBehaviour
     public float GetConstructionRadius()
     {
         return GetComponent<CapsuleCollider>().radius;
+    }
+
+    public Vector3 GetCannonTopForward()
+    {
+        return m_CannonTop.forward;
+    }
+
+    public Vector3 GetCannonPosition()
+    {
+        return m_CannonTop.position;
+    }
+
+    public void RotateCannon(float angle)
+    {
+        m_CannonTop.Rotate(Vector3.up, angle);
     }
 
     public void SetTowerAlphaColor(float alpha)
