@@ -4,13 +4,19 @@ using System.Collections.Generic;
 public class Player
 {
     public int m_Health = 1;
-    public int m_InitialCoins = 5;
+    public int m_InitialCoins = 500;
 
     int m_CurrentCoins = 0;
     int m_Score = 0;
 
     public delegate void CoinsChanged(int totalCoins);
     public static event CoinsChanged OnCoinsChanged;
+
+    public delegate void PlayerLost();
+    public static event PlayerLost OnPlayerLost;
+
+    public delegate void ScoreChanged(int score);
+    public static event ScoreChanged OnScoreChanged;
 
     PlayerController m_Controller;
 
@@ -26,9 +32,32 @@ public class Player
     {
     }
 
+    public void AddScore(int score)
+    {
+        m_Score += score;
+
+        if (OnScoreChanged != null)
+        {
+            OnScoreChanged(m_Score);
+        }
+    }
+
     public void ApplyDamage(int damage)
     {
         m_Health -= damage;
+
+        if (IsDead())
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        if (OnPlayerLost != null)
+        {
+            OnPlayerLost();
+        }
     }
 
     public bool IsDead()

@@ -7,17 +7,22 @@ using UnityEngine.AI;
 public class TowerLevel : MonoBehaviour
 {
     public TowerData m_Data;
+
     Transform m_Transform = null;
+    Transform m_CannonBase = null;
     Transform m_CannonTop = null;
+    Transform m_CannonEnd = null;
+    Transform m_RadiusSphere = null;
 
     void Awake()
     {
         m_Transform = transform;
-    }
-
-    private void Start()
-    {
+        m_CannonBase = m_Transform.Find("Base");
         m_CannonTop = m_Transform.Find("Top");
+        m_CannonEnd = m_CannonTop.Find("Cannon");
+        m_RadiusSphere = m_Transform.Find("Radius");
+
+        RefreshShootingRadiusSphere();
     }
 
     public void SetPosition(Vector3 pos)
@@ -47,7 +52,7 @@ public class TowerLevel : MonoBehaviour
 
     public Vector3 GetCannonPosition()
     {
-        return m_CannonTop.position;
+        return m_CannonEnd.position;
     }
 
     public void RotateCannon(float angle)
@@ -55,14 +60,29 @@ public class TowerLevel : MonoBehaviour
         m_CannonTop.Rotate(Vector3.up, angle);
     }
 
-    public void SetTowerAlphaColor(float alpha)
+    void SetAlpha(Renderer rend, float alpha)
     {
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        foreach (Renderer renderer in renderers)
-        {
-            Color c = renderer.material.color;
-            c.a = alpha;
-            renderer.material.color = c;
-        }
+        Color c = rend.material.color;
+        c.a = alpha;
+        rend.material.color = c;
+    }
+
+    void SetTowerAlphaColor(float alpha)
+    {
+        SetAlpha(m_CannonBase.GetComponent<Renderer>(), alpha);
+        SetAlpha(m_CannonTop.GetComponent<Renderer>(), alpha);
+    }
+
+    public void SetCanBuild(bool canbuild)
+    {
+        SetTowerAlphaColor(canbuild ? 1.0f : 0.5f);
+        m_RadiusSphere.gameObject.SetActive(canbuild);
+    }
+
+    void RefreshShootingRadiusSphere()
+    {
+        Vector3 scale = m_RadiusSphere.localScale;
+        scale *= m_Data.m_ShootingRadius;
+        m_RadiusSphere.localScale = scale;
     }
 }

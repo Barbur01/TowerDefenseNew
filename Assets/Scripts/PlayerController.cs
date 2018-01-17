@@ -18,6 +18,9 @@ public class PlayerController
     public delegate void TowerConstructed();
     public static event TowerConstructed OnTowerConstructed;
 
+    public delegate void TowerSelected();
+    public static event TowerSelected OnTowerSelected;
+
     State m_State = State.INVALID;
     TowerManager m_TowerManager = null;
     Player m_Player = null;
@@ -95,6 +98,9 @@ public class PlayerController
 
             if (m_TowerToManipulate != null)
             {
+                int cost = m_TowerToManipulate.GetUpgradeCost();
+                m_Player.AddCoins(cost);
+
                 m_TowerToManipulate.Upgrade();
                 m_TowerToManipulate = null;
 
@@ -106,16 +112,12 @@ public class PlayerController
     void OnCreepDied(Creep creep)
     {
         m_Player.AddCoins(creep.GetCoins());
+        m_Player.AddScore(1);
     }
 
     void OnPlayerBaseTouched(int damage)
     {
         m_Player.ApplyDamage(damage);
-
-        if (m_Player.IsDead())
-        {
-            Debug.Log("Player lost!!!");
-        }
     }
 
     public void Update()
@@ -131,6 +133,7 @@ public class PlayerController
         switch (m_State)
         {
             case State.IDLE:
+                UpdateIdle();
                 break;
             case State.PLACING_TOWER:
                 UpdatePlacingTower();
@@ -141,6 +144,31 @@ public class PlayerController
                 break;
             default:
                 break;
+        }
+    }
+
+    void UpdateIdle()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mpos = Input.mousePosition;
+            Ray r = Camera.main.ScreenPointToRay(mpos);
+            RaycastHit hit;
+
+            if (Physics.Raycast(r, out hit, 1000, LayerMask.GetMask("tower")))
+            {
+                m_TowerToManipulate = m_TowerManager.GetTower(hit.collider.gameObject);
+
+                if (CanUpgradeTower(m_TowerToManipulate))
+                {
+                    m_State = State.TOWER_SELECTED;
+
+                    if (OnTowerSelected != null)
+                    {
+                        OnTowerSelected();
+                    }
+                }
+            }
         }
     }
 
@@ -177,6 +205,16 @@ public class PlayerController
                 }
             }
         }
+    }
+
+    bool CanUpgradeTower(Tower tower)
+    {
+        if (tower.CanUpgrade() && m_Player.CanAfford(tower.GetUpgradeCost()))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     bool CanBuildTower(Vector3 pos, Tower tower)

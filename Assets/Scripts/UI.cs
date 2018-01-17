@@ -15,22 +15,45 @@ public class UI : MonoBehaviour
     public static event UpgradeTowerButtonPressed OnUpgradeTowerButtonPressed;
 
     public Text m_CoinsText;
+    public Text m_ScoreText;
     public Button m_CancelButton;
     public Button m_CreateButton;
     public Button m_UpgradeButton;
+    public GameObject m_LostPanel;
 
     private void OnEnable()
     {
         Player.OnCoinsChanged += OnCoinsChanged;
+        Player.OnPlayerLost += OnPlayerLost;
+        Player.OnScoreChanged += OnScoreChanged;
         PlayerController.OnPlacingTower += OnPlacingTower;
         PlayerController.OnTowerConstructed += OnTowerConstructed;
+        PlayerController.OnTowerSelected += OnTowerSelected;
     }
 
     private void OnDisable()
     {
         Player.OnCoinsChanged -= OnCoinsChanged;
+        Player.OnPlayerLost -= OnPlayerLost;
+        Player.OnScoreChanged -= OnScoreChanged;
         PlayerController.OnPlacingTower -= OnPlacingTower;
         PlayerController.OnTowerConstructed -= OnTowerConstructed;
+        PlayerController.OnTowerSelected -= OnTowerSelected;
+    }
+
+    void OnPlayerLost()
+    {
+        ShowLostPanel();
+    }
+
+    void OnScoreChanged(int score)
+    {
+        m_ScoreText.text = score.ToString();
+    }
+
+    void OnTowerSelected()
+    {
+        ShowUpgradeButton();
     }
 
     void OnTowerConstructed()
@@ -95,5 +118,10 @@ public class UI : MonoBehaviour
         m_CancelButton.gameObject.SetActive(false);
         m_UpgradeButton.gameObject.SetActive(true);
         m_CreateButton.gameObject.SetActive(false);
+    }
+
+    void ShowLostPanel()
+    {
+        m_LostPanel.SetActive(true);
     }
 }

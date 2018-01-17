@@ -47,7 +47,17 @@ public class Tower
         return new TowerData();
     }
 
-    public int GetCost()
+    public int GetUpgradeCost()
+    {
+        if (CanUpgrade())
+        {
+            return m_TowerLevels[m_CurrentLevelIndex + 1].m_Data.m_Cost;
+        }
+
+        return int.MaxValue;
+    }
+
+        public int GetCost()
     {
         if (m_CurrentLevel)
         {
@@ -99,6 +109,16 @@ public class Tower
         m_CurrentLevel.RotateCannon(angle);
     }
 
+    public bool IsOwnerOf(GameObject gameObject)
+    {
+        if (m_CurrentLevel)
+        {
+            return m_CurrentLevel.gameObject == gameObject;
+        }
+
+        return false;
+    }
+
     public bool IsOwnCollider(Collider col)
     {
         if (m_CurrentLevel)
@@ -138,7 +158,7 @@ public class Tower
     {
         if (m_CurrentLevel)
         {
-            m_CurrentLevel.SetTowerAlphaColor(canBuild ? 1.0f : 0.5f);
+            m_CurrentLevel.SetCanBuild(canBuild);
         }
     }
 
@@ -170,19 +190,26 @@ public class Tower
         }
     }
 
+    public bool CanUpgrade()
+    {
+        return m_CurrentLevelIndex + 1 < m_TowerLevels.Count;
+    }
+
     public void Upgrade()
     {
-        if (m_CurrentLevelIndex + 1 < m_TowerLevels.Count)
+        if (CanUpgrade())
         {
             if (m_CurrentLevel != null)
             {
-                GameObject.Destroy(m_CurrentLevel);
+                GameObject.Destroy(m_CurrentLevel.gameObject);
             }
 
             ++m_CurrentLevelIndex;
 
             m_CurrentLevel = CreateTowerLevel();
             m_CurrentLevel.SetPosition(m_Position);
+
+            Construct();
         }
     }
 

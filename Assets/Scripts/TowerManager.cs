@@ -18,6 +18,17 @@ public class TowerManager
         LoadTowers();
     }
 
+    ~TowerManager()
+    {
+        for (int i = 0; i < m_Towers.Count; ++i)
+        {
+            m_Towers[i].Destroy();
+        }
+
+        m_Towers.Clear();
+        m_TowerTemplates.Clear();
+    }
+
     void LoadTowers()
     {
         for (int i = 0; i < (int)Tower.Type.COUNT; ++i)
@@ -30,6 +41,19 @@ public class TowerManager
                 m_TowerTemplates.Add((Tower.Type)i, new List<Object>(allTowerLevels));
             }
         }
+    }
+
+    public Tower GetTower(GameObject towerObject)
+    {
+        foreach (Tower tower in m_Towers)
+        {
+            if (tower.IsOwnerOf(towerObject))
+            {
+                return tower;
+            }
+        }
+
+        return null;
     }
 
     public Tower PrepareNewTower(Tower.Type type)

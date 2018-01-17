@@ -24,9 +24,12 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        other.SendMessage("ApplyDamage", m_Damage);
+        if (m_Target.gameObject == other.gameObject)
+        {
+            other.SendMessage("ApplyDamage", m_Damage);
 
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -39,9 +42,9 @@ public class Projectile : MonoBehaviour
         else
         {
             Vector3 dir = m_Target.position - m_Transform.position;
+            float elapsed = Mathf.Min(dir.magnitude, m_Speed * Time.deltaTime);
             dir = dir.normalized;
-
-            m_Transform.position += dir * m_Speed * Time.deltaTime;
+            m_Transform.position += dir * elapsed;
         }
 	}
 }

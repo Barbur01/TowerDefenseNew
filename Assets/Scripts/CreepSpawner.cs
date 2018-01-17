@@ -6,7 +6,6 @@ public class CreepSpawner : MonoBehaviour
     public Vector2 m_TimeBetweenOrders;
     public int m_MaxEnemiesOrder;
     public int MAX_FIBONAZZI;
-    public GameObject m_Creep;
     private Vector3 m_NextTargetPosition;
 
     Transform m_Transform;
@@ -94,7 +93,7 @@ public class CreepSpawner : MonoBehaviour
 
     void CreateEnemy()
     {
-        GameObject.Instantiate(m_Creep, m_NextTargetPosition, Quaternion.identity, m_Transform);
+        EnemyManager.Instance.CreateRandomEnemy(m_NextTargetPosition, m_Transform);
         m_NextTargetPosition = GetNextTargetPoint();
     }
 

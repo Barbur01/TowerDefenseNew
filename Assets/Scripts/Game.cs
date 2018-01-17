@@ -5,12 +5,33 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
     Player m_Player;
-    
-	// Use this for initialization
-	void Start ()
+
+    private void OnEnable()
+    {
+        Player.OnPlayerLost += OnPlayerLost;
+    }
+
+    private void OnDisable()
+    {
+        Player.OnPlayerLost -= OnPlayerLost;
+    }
+
+    // Use this for initialization
+    void Start ()
     {
         m_Player = new Player();
+        EnemyManager.Instance.Init();
 	}
+
+    void OnDestroy()
+    {
+        EnemyManager.Instance.Destroy();
+    }
+
+    void OnPlayerLost()
+    {
+        m_Player.
+    }
 
     // Update is called once per frame
     void Update ()
