@@ -1913,25 +1913,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1734893779716958, guid: c214eb3ced75fee49886f8206623aef8, type: 2}
-      propertyPath: m_Name
-      value: Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 114555621073620436, guid: c214eb3ced75fee49886f8206623aef8,
-        type: 2}
-      propertyPath: m_IgnoreReversedGraphics
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114555621073620436, guid: c214eb3ced75fee49886f8206623aef8,
-        type: 2}
-      propertyPath: m_BlockingObjects
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114555621073620436, guid: c214eb3ced75fee49886f8206623aef8,
-        type: 2}
-      propertyPath: m_BlockingMask.m_Bits
-      value: 32
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c214eb3ced75fee49886f8206623aef8, type: 2}
   m_IsPrefabParent: 0

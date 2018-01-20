@@ -13,6 +13,7 @@ public class EnemyManager
 
     public void Init ()
     {
+        m_Spawners = new List<CreepSpawner>();
         m_Enemies = new List<GameObject>();
         LoadEnemies();
         SetupSpawners();
@@ -21,6 +22,11 @@ public class EnemyManager
     public void Reset()
     {
         DestroyEnemyInstances();
+
+        foreach (CreepSpawner item in m_Spawners)
+        {
+            item.Reset();
+        }
     }
 
     void DestroyEnemyInstances()
@@ -41,6 +47,7 @@ public class EnemyManager
 
         foreach (CreepSpawner item in spawners)
         {
+            m_Spawners.Add(item);
             item.SetEnemyManager(this);
         }
     }
@@ -57,13 +64,21 @@ public class EnemyManager
         Assert.IsTrue(m_EnemyTemplates.Count > 0);
     }
 
-    public GameObject CreateRandomEnemy(Vector3 pos, Transform parent)
+    int GetEnemyIndexFromDifficulty(int difficulty)
+    {
+        difficulty = Mathf.Clamp(difficulty, 0, m_EnemyTemplates.Count - 1);
+
+        return Random.Range(0, difficulty + 1);
+    }
+
+    public GameObject CreateRandomEnemy(Vector3 pos, Transform parent, int difficulty)
     {
         GameObject enemy = null;
 
         if (m_EnemyTemplates.Count > 0)
         {
-            int random = Random.Range(0, m_EnemyTemplates.Count);
+            int random = GetEnemyIndexFromDifficulty(difficulty);
+
             Debug.Log("Picking enemy wity index  " + random);
             enemy = GameObject.Instantiate(m_EnemyTemplates[random] as GameObject, pos, Quaternion.identity, parent);
 

@@ -3,12 +3,24 @@ using System.Collections.Generic;
 
 public class Player
 {
-    public int m_InitialHealth = 1;
-    public int m_InitialCoins = 500;
+    public enum State
+    {
+        IDLE = 0,
+        PLACING_TOWER,
+        TOWER_SELECTED,
+
+        INVALID
+    };
+
+    int m_InitialHealth = 1;
+    int m_InitialCoins = 5;
 
     int m_Health = 1;
     int m_CurrentCoins = 0;
     int m_Score = 0;
+    State m_State = State.INVALID;
+
+    PlayerController m_Controller;
 
     public delegate void CoinsChanged(int totalCoins);
     public static event CoinsChanged OnCoinsChanged;
@@ -19,25 +31,34 @@ public class Player
     public delegate void ScoreChanged(int score);
     public static event ScoreChanged OnScoreChanged;
 
-    PlayerController m_Controller;
 
     public void Init(TowerManager towerManager)
     {
         m_Controller = new PlayerController();
         m_Controller.Init(this, towerManager);
 
-        AddCoins(m_InitialCoins);
-        m_Score = 0;
-        m_Health = m_InitialHealth;
+        Reset();
     }
 
     public void Reset()
     {
         m_Controller.Reset();
 
+        m_CurrentCoins = 0;
         AddCoins(m_InitialCoins);
         m_Score = 0;
+        AddScore(0);
         m_Health = m_InitialHealth;
+    }
+
+    public void SetState(State state)
+    {
+        m_State = state;
+    }
+
+    public State GetState()
+    {
+        return m_State;
     }
 
     public void AddScore(int score)

@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Speed: 1.5
   m_Health: 1
-  m_NumCoins: 1
+  m_NumCoins: 2
   m_Damage: 1
 --- !u!195 &195519443277204382
 NavMeshAgent:

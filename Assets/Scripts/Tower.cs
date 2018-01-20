@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tower
-{ 
+{
+    public enum State
+    {
+        IDLE,
+        ATTACK,
+
+        INVALID
+    };
+
     List<TowerLevel> m_TowerLevels = new List<TowerLevel>();
     int m_CurrentLevelIndex = 0;
     TowerLevel m_CurrentLevel = null;
     TowerController m_Controller = null;
     Transform m_EnemyTarget = null;
     Vector3 m_Position;
+
+    State m_State = State.INVALID;
 
     public enum Type
     {
@@ -20,7 +30,8 @@ public class Tower
 
     public void Init()
     {
-        m_Controller = new TowerController(this);
+        m_Controller = new TowerController();
+        m_Controller.Init(this);
     }
 
     public void Destroy()
@@ -30,6 +41,16 @@ public class Tower
             GameObject.Destroy(m_CurrentLevel.gameObject);
             m_CurrentLevel = null;
         }
+    }
+
+    public void SetState(State state)
+    {
+        m_State = state;
+    }
+
+    public State GetState()
+    {
+        return m_State;
     }
 
     public void Select()

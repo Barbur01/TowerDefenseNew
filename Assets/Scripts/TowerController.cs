@@ -4,22 +4,13 @@ using UnityEngine;
 
 public class TowerController
 {
-    enum State
-    {
-        IDLE,
-        ATTACK,
-
-        INVALID
-    };
-
     Tower m_Tower = null;
-    State m_State = State.INVALID;
     float m_LastShotTime = 0.0f;
 
-    public TowerController(Tower tower)
+    public void Init(Tower tower)
     {
         m_Tower = tower;
-        m_State = State.IDLE;
+        m_Tower.SetState(Tower.State.IDLE);
     }
 
     bool IsInsideShootingRadius(Transform target)
@@ -62,15 +53,15 @@ public class TowerController
     {
         m_LastShotTime -= Time.deltaTime;
 
-        switch (m_State)
+        switch (m_Tower.GetState())
         {
-            case State.IDLE:
+            case Tower.State.IDLE:
                 UpdateIdle();
                 break;
-            case State.ATTACK:
+            case Tower.State.ATTACK:
                 UpdateAttack();
                 break;
-            case State.INVALID:
+            case Tower.State.INVALID:
                 break;
             default:
                 break;
@@ -90,7 +81,7 @@ public class TowerController
         if (m_Tower.HasEnemyTarget())
         {
             target.GetComponent<Creep>().SetTargeted(true);
-            m_State = State.ATTACK;
+            m_Tower.SetState(Tower.State.ATTACK);
         }
     }
 
@@ -144,14 +135,14 @@ public class TowerController
                 target.GetComponent<Creep>().SetTargeted(false);
             }
 
-            m_State = State.IDLE;
+            m_Tower.SetState(Tower.State.IDLE);
             m_Tower.SetEnemyTarget(null);
         }
         else
         {
             float targetAngle = FaceTarget(target);
 
-            if (Mathf.Abs(targetAngle) < 5.0f)
+            if (Mathf.Abs(targetAngle) < 10.0f)
             {
                 Shoot(target);
             }

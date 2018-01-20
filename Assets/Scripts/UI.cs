@@ -32,6 +32,7 @@ public class UI : MonoBehaviour
         PlayerController.OnPlacingTower += OnPlacingTower;
         PlayerController.OnTowerConstructed += OnTowerConstructed;
         PlayerController.OnTowerSelected += OnTowerSelected;
+        PlayerController.OnTowerCanUpgrade += OnTowerCanUpgrade;
     }
 
     private void OnDisable()
@@ -42,6 +43,7 @@ public class UI : MonoBehaviour
         PlayerController.OnPlacingTower -= OnPlacingTower;
         PlayerController.OnTowerConstructed -= OnTowerConstructed;
         PlayerController.OnTowerSelected -= OnTowerSelected;
+        PlayerController.OnTowerCanUpgrade -= OnTowerCanUpgrade;
     }
 
     void Restart()
@@ -71,6 +73,11 @@ public class UI : MonoBehaviour
         {
             ShowCreateButton();
         }
+    }
+
+    void OnTowerCanUpgrade()
+    {
+        ShowUpgradeButton();
     }
 
     void OnTowerConstructed()

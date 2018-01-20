@@ -12,6 +12,8 @@ public class CreepSpawner : MonoBehaviour
     float m_TimeUntilNextOrder;
     float m_TimeUntilNextEnemy;
 
+    int m_WavesCounter = 0;
+
     Vector3 m_NextTargetPosition;
     Transform m_Transform;
     EnemyManager m_EnemyManager;
@@ -37,6 +39,16 @@ public class CreepSpawner : MonoBehaviour
         m_State = SpawnerState.WAITING;
         m_NumEnemies = 0;
         m_TimeUntilNextEnemy = 0.0f;
+        m_WavesCounter = 0;
+    }
+
+    public void Reset()
+    {
+        m_WavesCounter = 0;
+        m_TimeUntilNextEnemy = 0.0f;
+        m_NumEnemies = 0;
+        m_LastFibonacciIndex = 1;
+        m_State = SpawnerState.WAITING;
     }
 
     public void SetEnemyManager(EnemyManager enemyManager)
@@ -84,6 +96,8 @@ public class CreepSpawner : MonoBehaviour
                 }
                 break;
             case SpawnerState.SPAWNING_END:
+                m_WavesCounter++;
+
                 if (m_LastFibonacciIndex < MAX_FIBONAZZI)
                 {
                     m_LastFibonacciIndex++;
@@ -97,9 +111,19 @@ public class CreepSpawner : MonoBehaviour
         }
     }
 
+    int GetDifficulty()
+    {
+        if (m_WavesCounter < 7)
+            return 0;
+        else if (m_WavesCounter < 14)
+            return 1;
+
+        return 2;
+    }
+
     void CreateEnemy()
     {
-        m_EnemyManager.CreateRandomEnemy(m_NextTargetPosition, m_Transform);
+        m_EnemyManager.CreateRandomEnemy(m_NextTargetPosition, m_Transform, GetDifficulty());
         m_NextTargetPosition = GetNextTargetPoint();
     }
 

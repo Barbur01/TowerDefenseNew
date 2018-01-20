@@ -349,8 +349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Data:
-    m_ShootSpeed: 1
-    m_RotationSpeed: 40
+    m_ShootSpeed: 1.2
+    m_RotationSpeed: 50
     m_ShootingRadius: 4
     m_Cost: 8
     m_Damage: 1
