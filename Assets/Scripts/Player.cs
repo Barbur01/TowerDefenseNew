@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 public class Player
 {
-    public int m_Health = 1;
+    public int m_InitialHealth = 1;
     public int m_InitialCoins = 500;
 
+    int m_Health = 1;
     int m_CurrentCoins = 0;
     int m_Score = 0;
 
@@ -26,10 +27,20 @@ public class Player
 
         AddCoins(m_InitialCoins);
         m_Score = 0;
+        m_Health = m_InitialHealth;
     }
 
     ~Player()
     {
+    }
+
+    public void Reset()
+    {
+        m_Controller.Reset();
+
+        AddCoins(m_InitialCoins);
+        m_Score = 0;
+        m_Health = m_InitialHealth;
     }
 
     public void AddScore(int score)

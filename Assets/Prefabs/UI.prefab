@@ -571,6 +571,7 @@ MonoBehaviour:
   m_CancelButton: {fileID: 114522877964555560}
   m_CreateButton: {fileID: 114344923952418768}
   m_UpgradeButton: {fileID: 114703846248194998}
+  m_LostPanel: {fileID: 1893745860798230}
 --- !u!114 &114261285375495112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -642,7 +643,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114485319854271200}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114170600080716000}
+        m_MethodName: ReplayGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114344923952418768
@@ -898,7 +910,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114803021682629516}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114170600080716000}
+        m_MethodName: QuitApplication
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114672069708001122

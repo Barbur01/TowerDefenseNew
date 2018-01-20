@@ -20,13 +20,23 @@ public class TowerManager
 
     ~TowerManager()
     {
+        DestroyTowerInstances();
+        m_TowerTemplates.Clear();
+    }
+
+    public void Reset()
+    {
+        DestroyTowerInstances();
+    }
+
+    void DestroyTowerInstances()
+    {
         for (int i = 0; i < m_Towers.Count; ++i)
         {
             m_Towers[i].Destroy();
         }
 
         m_Towers.Clear();
-        m_TowerTemplates.Clear();
     }
 
     void LoadTowers()

@@ -9,11 +9,13 @@ public class Game : MonoBehaviour
     private void OnEnable()
     {
         Player.OnPlayerLost += OnPlayerLost;
+        UI.OnReplayGameRequested += OnReplayGameRequested;
     }
 
     private void OnDisable()
     {
         Player.OnPlayerLost -= OnPlayerLost;
+        UI.OnReplayGameRequested -= OnReplayGameRequested;
     }
 
     // Use this for initialization
@@ -28,9 +30,16 @@ public class Game : MonoBehaviour
         EnemyManager.Instance.Destroy();
     }
 
+    void OnReplayGameRequested()
+    {
+        m_Player.Reset();
+        EnemyManager.Instance.Reset();
+        Time.timeScale = 1.0f;
+    }
+
     void OnPlayerLost()
     {
-        m_Player.
+        Time.timeScale = 0.0f;
     }
 
     // Update is called once per frame

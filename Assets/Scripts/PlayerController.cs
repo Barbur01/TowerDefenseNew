@@ -50,6 +50,13 @@ public class PlayerController
         UI.OnUpgradeTowerButtonPressed -= OnUpgradeTowerButtonPressed;
     }
 
+    public void Reset()
+    {
+        m_TowerToManipulate = null;
+        m_TowerManager.Reset();
+        m_State = State.IDLE;
+    }
+
     void OnCreateTowerButtonPressed(Tower.Type type)
     {
         if (m_State == State.IDLE)

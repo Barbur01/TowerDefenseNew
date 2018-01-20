@@ -31,13 +31,23 @@ public class EnemyManager
 
     public void Destroy()
     {
+        DestroyEnemyInstances();
+        m_EnemyTemplates.Clear();
+    }
+
+    public void Reset()
+    {
+        DestroyEnemyInstances();
+    }
+
+    void DestroyEnemyInstances()
+    {
         for (int i = 0; i < m_Enemies.Count; ++i)
         {
             GameObject.Destroy(m_Enemies[i]);
         }
 
         m_Enemies.Clear();
-        m_EnemyTemplates.Clear();
     }
 
     bool LoadEnemies()

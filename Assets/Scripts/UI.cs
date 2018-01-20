@@ -14,6 +14,9 @@ public class UI : MonoBehaviour
     public delegate void UpgradeTowerButtonPressed();
     public static event UpgradeTowerButtonPressed OnUpgradeTowerButtonPressed;
 
+    public delegate void ReplayGameRequested();
+    public static event ReplayGameRequested OnReplayGameRequested;
+    
     public Text m_CoinsText;
     public Text m_ScoreText;
     public Button m_CancelButton;
@@ -41,9 +44,16 @@ public class UI : MonoBehaviour
         PlayerController.OnTowerSelected -= OnTowerSelected;
     }
 
+    void Restart()
+    {
+        ShowCreateButton();
+        m_LostPanel.SetActive(false);
+    }
+
     void OnPlayerLost()
     {
         ShowLostPanel();
+        DisableAllHud();
     }
 
     void OnScoreChanged(int score)
@@ -99,6 +109,21 @@ public class UI : MonoBehaviour
         ShowCreateButton();
     }
 
+    public void QuitApplication()
+    {
+        Application.Quit();
+    }
+
+    public void ReplayGame()
+    {
+        if (OnReplayGameRequested != null)
+        {
+            OnReplayGameRequested();
+        }
+
+        Restart();
+    }
+
     void ShowCancelButton()
     {
         m_CancelButton.gameObject.SetActive(true);
@@ -117,6 +142,13 @@ public class UI : MonoBehaviour
     {
         m_CancelButton.gameObject.SetActive(false);
         m_UpgradeButton.gameObject.SetActive(true);
+        m_CreateButton.gameObject.SetActive(false);
+    }
+
+    void DisableAllHud()
+    {
+        m_CancelButton.gameObject.SetActive(false);
+        m_UpgradeButton.gameObject.SetActive(false);
         m_CreateButton.gameObject.SetActive(false);
     }
 
