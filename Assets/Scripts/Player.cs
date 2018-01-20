@@ -21,17 +21,14 @@ public class Player
 
     PlayerController m_Controller;
 
-    public Player()
+    public void Init(TowerManager towerManager)
     {
-        m_Controller = new PlayerController(this);
+        m_Controller = new PlayerController();
+        m_Controller.Init(this, towerManager);
 
         AddCoins(m_InitialCoins);
         m_Score = 0;
         m_Health = m_InitialHealth;
-    }
-
-    ~Player()
-    {
     }
 
     public void Reset()

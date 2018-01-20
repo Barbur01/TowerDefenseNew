@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 using UnityEngine;
+
 
 public class TowerManager
 {
@@ -10,18 +12,12 @@ public class TowerManager
     Dictionary<Tower.Type, List<Object>> m_TowerTemplates;
     List<Tower> m_Towers;
 
-    public TowerManager()
+    public void Init()
     {
         m_TowerTemplates = new Dictionary<Tower.Type, List<Object>>();
         m_Towers = new List<Tower>();
 
         LoadTowers();
-    }
-
-    ~TowerManager()
-    {
-        DestroyTowerInstances();
-        m_TowerTemplates.Clear();
     }
 
     public void Reset()
@@ -51,10 +47,14 @@ public class TowerManager
                 m_TowerTemplates.Add((Tower.Type)i, new List<Object>(allTowerLevels));
             }
         }
+
+        Assert.IsTrue(m_TowerTemplates.Count > 0);
     }
 
     public Tower GetTower(GameObject towerObject)
     {
+        Assert.IsTrue(towerObject != null);
+
         foreach (Tower tower in m_Towers)
         {
             if (tower.IsOwnerOf(towerObject))
@@ -72,10 +72,12 @@ public class TowerManager
 
         List<Object> towerTemplates;
         bool found = m_TowerTemplates.TryGetValue(type, out towerTemplates);
+        Assert.IsTrue(found);
 
         if (found)
         {
-            tower = new Tower(Tower.Type.BASIC);
+            tower = new Tower();
+            tower.Init();
 
             foreach (GameObject towerObject in towerTemplates)
             {
@@ -91,18 +93,29 @@ public class TowerManager
 
     public void AddTower(Tower tower)
     {
-        m_Towers.Add(tower);
+        Assert.IsTrue(tower != null);
+
+        if (tower != null)
+        {
+            m_Towers.Add(tower);
+        }
     }
 
     public void DestroyTower(Tower tower)
     {
-        tower.Destroy();
+        Assert.IsTrue(tower != null);
+
+        if (tower != null)
+        {
+            tower.Destroy();
+        }
     }
 
     public int GetCost(Tower.Type type)
     {
         List<Object> towerData;
         bool found = m_TowerTemplates.TryGetValue(type, out towerData);
+        Assert.IsTrue(found);
 
         if (found)
         {

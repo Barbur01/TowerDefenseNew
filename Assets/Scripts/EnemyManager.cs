@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class EnemyManager
 {
@@ -8,31 +9,13 @@ public class EnemyManager
     List<Object> m_EnemyTemplates = null;
     List<GameObject> m_Enemies;
 
-    private static EnemyManager instance;
-    private EnemyManager() { }
-    public static EnemyManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new EnemyManager();               
-            }
-            return instance;
-        }
-    }
+    List<CreepSpawner> m_Spawners;
 
-    // Use this for initialization
     public void Init ()
     {
         m_Enemies = new List<GameObject>();
         LoadEnemies();
-	}
-
-    public void Destroy()
-    {
-        DestroyEnemyInstances();
-        m_EnemyTemplates.Clear();
+        SetupSpawners();
     }
 
     public void Reset()
@@ -50,7 +33,19 @@ public class EnemyManager
         m_Enemies.Clear();
     }
 
-    bool LoadEnemies()
+    void SetupSpawners()
+    {
+        CreepSpawner[] spawners = GameObject.FindObjectsOfType<CreepSpawner>();
+
+        Assert.IsTrue(spawners.Length > 0);
+
+        foreach (CreepSpawner item in spawners)
+        {
+            item.SetEnemyManager(this);
+        }
+    }
+
+    void LoadEnemies()
     {
         Object[] allTowerLevels = Resources.LoadAll(ENEMY_PATH) as Object[];
 
@@ -59,16 +54,21 @@ public class EnemyManager
             m_EnemyTemplates = new List<Object>(allTowerLevels);
         }
 
-        return m_EnemyTemplates.Count > 0;
+        Assert.IsTrue(m_EnemyTemplates.Count > 0);
     }
 
     public GameObject CreateRandomEnemy(Vector3 pos, Transform parent)
     {
-        int random = Random.Range(0, m_EnemyTemplates.Count);
-        Debug.Log("Index pickj enemy is " + random);
-        GameObject enemy = GameObject.Instantiate(m_EnemyTemplates[random] as GameObject, pos, Quaternion.identity, parent);
+        GameObject enemy = null;
 
-        m_Enemies.Add(enemy);
+        if (m_EnemyTemplates.Count > 0)
+        {
+            int random = Random.Range(0, m_EnemyTemplates.Count);
+            Debug.Log("Picking enemy wity index  " + random);
+            enemy = GameObject.Instantiate(m_EnemyTemplates[random] as GameObject, pos, Quaternion.identity, parent);
+
+            m_Enemies.Add(enemy);
+        }
 
         return enemy;
     }

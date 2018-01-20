@@ -1816,11 +1816,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1498317779}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1659332528 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1893745860798230, guid: c214eb3ced75fee49886f8206623aef8,
-    type: 2}
-  m_PrefabInternal: {fileID: 1803649259}
 --- !u!1001 &1803649259
 Prefab:
   m_ObjectHideFlags: 0
@@ -1922,11 +1917,21 @@ Prefab:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 114170600080716000, guid: c214eb3ced75fee49886f8206623aef8,
+    - target: {fileID: 114555621073620436, guid: c214eb3ced75fee49886f8206623aef8,
         type: 2}
-      propertyPath: m_LostPanel
-      value: 
-      objectReference: {fileID: 1659332528}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114555621073620436, guid: c214eb3ced75fee49886f8206623aef8,
+        type: 2}
+      propertyPath: m_BlockingObjects
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114555621073620436, guid: c214eb3ced75fee49886f8206623aef8,
+        type: 2}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 32
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c214eb3ced75fee49886f8206623aef8, type: 2}
   m_IsPrefabParent: 0

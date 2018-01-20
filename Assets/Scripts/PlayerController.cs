@@ -18,7 +18,7 @@ public class PlayerController
     public delegate void TowerConstructed();
     public static event TowerConstructed OnTowerConstructed;
 
-    public delegate void TowerSelected();
+    public delegate void TowerSelected(bool selected);
     public static event TowerSelected OnTowerSelected;
 
     State m_State = State.INVALID;
@@ -27,13 +27,8 @@ public class PlayerController
 
     Tower m_TowerToManipulate = null;
 
-    public PlayerController(Player player)
+    public PlayerController()
     {
-        m_Player = player;
-        m_TowerManager = new TowerManager();
-
-        m_State = State.IDLE;
-
         PlayerBase.OnPlayerBaseTouched += OnPlayerBaseTouched;
         Creep.OnCreepDied += OnCreepDied;
         UI.OnCreateTowerButtonPressed += OnCreateTowerButtonPressed;
@@ -50,13 +45,19 @@ public class PlayerController
         UI.OnUpgradeTowerButtonPressed -= OnUpgradeTowerButtonPressed;
     }
 
+    public void Init(Player player, TowerManager towerManager)
+    {
+        m_Player = player;
+        m_State = State.IDLE;
+        m_TowerManager = towerManager;
+    }
+
     public void Reset()
     {
         m_TowerToManipulate = null;
-        m_TowerManager.Reset();
         m_State = State.IDLE;
     }
-
+    
     void OnCreateTowerButtonPressed(Tower.Type type)
     {
         if (m_State == State.IDLE)
@@ -109,6 +110,8 @@ public class PlayerController
                 m_Player.AddCoins(cost);
 
                 m_TowerToManipulate.Upgrade();
+                m_TowerToManipulate.Unselect(2.0f);
+
                 m_TowerToManipulate = null;
 
                 m_State = State.IDLE;
@@ -129,8 +132,6 @@ public class PlayerController
 
     public void Update()
     {
-        m_TowerManager.Update();
-
         UpdateStates();
         UpdateDebugInput();
     }
@@ -146,11 +147,57 @@ public class PlayerController
                 UpdatePlacingTower();
                 break;
             case State.TOWER_SELECTED:
+                UpdateTowerSelected();
                 break;
             case State.INVALID:
                 break;
             default:
                 break;
+        }
+    }
+
+    void UpdateTowerSelected()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mpos = Input.mousePosition;
+            Ray r = Camera.main.ScreenPointToRay(mpos);
+            RaycastHit hit;
+
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                m_TowerToManipulate.Unselect(0.0f);
+                m_TowerToManipulate = null;
+                m_State = State.IDLE;
+
+                if (Physics.Raycast(r, out hit, 1000, LayerMask.GetMask("tower")))
+                {
+                    Tower towerToManipulate = m_TowerManager.GetTower(hit.collider.gameObject);
+                    if (towerToManipulate != m_TowerToManipulate)
+                    {
+                        if (m_TowerToManipulate != null)
+                        {
+                            m_TowerToManipulate.Unselect(0.0f);
+                        }
+
+                        m_TowerToManipulate = towerToManipulate;
+                        m_TowerToManipulate.Select();
+
+                        if (CanUpgradeTower(m_TowerToManipulate))
+                        {
+                            m_State = State.TOWER_SELECTED;
+                        }
+                    }
+                }
+
+                if (m_State == State.IDLE)
+                {
+                    if (OnTowerSelected != null)
+                    {
+                        OnTowerSelected(false);
+                    }
+                }
+            }
         }
     }
 
@@ -165,6 +212,7 @@ public class PlayerController
             if (Physics.Raycast(r, out hit, 1000, LayerMask.GetMask("tower")))
             {
                 m_TowerToManipulate = m_TowerManager.GetTower(hit.collider.gameObject);
+                m_TowerToManipulate.Select();
 
                 if (CanUpgradeTower(m_TowerToManipulate))
                 {
@@ -172,7 +220,7 @@ public class PlayerController
 
                     if (OnTowerSelected != null)
                     {
-                        OnTowerSelected();
+                        OnTowerSelected(true);
                     }
                 }
             }
@@ -198,9 +246,9 @@ public class PlayerController
                 {
                     m_TowerManager.AddTower(m_TowerToManipulate);
                     m_TowerToManipulate.Construct();
+                    m_TowerToManipulate.Unselect(0.0f);
 
                     m_Player.AddCoins(-m_TowerToManipulate.GetCost());
-
                     m_TowerToManipulate = null;
 
                     if (OnTowerConstructed != null)

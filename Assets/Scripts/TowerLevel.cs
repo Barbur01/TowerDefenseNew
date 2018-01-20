@@ -85,4 +85,26 @@ public class TowerLevel : MonoBehaviour
         scale *= m_Data.m_ShootingRadius;
         m_RadiusSphere.localScale = scale;
     }
+
+    public void ShowShootingRadius(bool visible, float delay)
+    {
+        if (visible)
+        {
+            Invoke("ShowShootingRadius", delay);
+        }
+        else
+        {
+            Invoke("HideShootingRadius", delay);
+        }
+    }
+
+    void ShowShootingRadius()
+    {
+        m_RadiusSphere.gameObject.SetActive(true);
+    }
+
+    void HideShootingRadius()
+    {
+        m_RadiusSphere.gameObject.SetActive(false);
+    }
 }

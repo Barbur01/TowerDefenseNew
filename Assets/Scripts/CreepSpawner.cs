@@ -6,14 +6,15 @@ public class CreepSpawner : MonoBehaviour
     public Vector2 m_TimeBetweenOrders;
     public int m_MaxEnemiesOrder;
     public int MAX_FIBONAZZI;
-    private Vector3 m_NextTargetPosition;
 
+    int m_LastFibonacciIndex;
+    int m_NumEnemies;
+    float m_TimeUntilNextOrder;
+    float m_TimeUntilNextEnemy;
+
+    Vector3 m_NextTargetPosition;
     Transform m_Transform;
-
-    private int m_LastFibonacciIndex;
-    private float m_TimeUntilNextOrder;
-    private int m_NumEnemies;
-    private float m_TimeUntilNextEnemy;
+    EnemyManager m_EnemyManager;
 
     private enum SpawnerState
     {
@@ -36,6 +37,11 @@ public class CreepSpawner : MonoBehaviour
         m_State = SpawnerState.WAITING;
         m_NumEnemies = 0;
         m_TimeUntilNextEnemy = 0.0f;
+    }
+
+    public void SetEnemyManager(EnemyManager enemyManager)
+    {
+        m_EnemyManager = enemyManager;
     }
 
     float GenerateTimeForNextOrder()
@@ -93,7 +99,7 @@ public class CreepSpawner : MonoBehaviour
 
     void CreateEnemy()
     {
-        EnemyManager.Instance.CreateRandomEnemy(m_NextTargetPosition, m_Transform);
+        m_EnemyManager.CreateRandomEnemy(m_NextTargetPosition, m_Transform);
         m_NextTargetPosition = GetNextTargetPoint();
     }
 

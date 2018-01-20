@@ -61,9 +61,16 @@ public class UI : MonoBehaviour
         m_ScoreText.text = score.ToString();
     }
 
-    void OnTowerSelected()
+    void OnTowerSelected(bool selected)
     {
-        ShowUpgradeButton();
+        if (selected)
+        {
+            ShowUpgradeButton();
+        }
+        else
+        {
+            ShowCreateButton();
+        }
     }
 
     void OnTowerConstructed()

@@ -5,6 +5,8 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
     Player m_Player;
+    EnemyManager m_EnemyManager;
+    TowerManager m_TowerManager;
 
     private void OnEnable()
     {
@@ -21,19 +23,21 @@ public class Game : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        m_TowerManager = new TowerManager();
+        m_TowerManager.Init();
+
+        m_EnemyManager = new EnemyManager();
+        m_EnemyManager.Init();
+
         m_Player = new Player();
-        EnemyManager.Instance.Init();
+        m_Player.Init(m_TowerManager);
 	}
-
-    void OnDestroy()
-    {
-        EnemyManager.Instance.Destroy();
-    }
-
+    
     void OnReplayGameRequested()
     {
         m_Player.Reset();
-        EnemyManager.Instance.Reset();
+        m_TowerManager.Reset();
+        m_EnemyManager.Reset();
         Time.timeScale = 1.0f;
     }
 
@@ -46,5 +50,7 @@ public class Game : MonoBehaviour
     void Update ()
     {
         m_Player.Update();
-	}
+        m_TowerManager.Update();
+
+    }
 }

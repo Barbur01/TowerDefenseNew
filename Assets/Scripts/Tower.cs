@@ -8,9 +8,7 @@ public class Tower
     int m_CurrentLevelIndex = 0;
     TowerLevel m_CurrentLevel = null;
     TowerController m_Controller = null;
-
     Transform m_EnemyTarget = null;
-
     Vector3 m_Position;
 
     public enum Type
@@ -20,11 +18,8 @@ public class Tower
         INVALID
     };
 
-    Type m_Type = Type.INVALID;
-
-    public Tower(Type type)
+    public void Init()
     {
-        m_Type = type;
         m_Controller = new TowerController(this);
     }
 
@@ -35,6 +30,16 @@ public class Tower
             GameObject.Destroy(m_CurrentLevel.gameObject);
             m_CurrentLevel = null;
         }
+    }
+
+    public void Select()
+    {
+        m_CurrentLevel.ShowShootingRadius(true, 0.0f);
+    }
+
+    public void Unselect(float delay)
+    {
+        m_CurrentLevel.ShowShootingRadius(false, delay);
     }
 
     public TowerData GetCurrentLevelData()
